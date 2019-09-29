@@ -7,32 +7,39 @@ using System.IO;
 
 namespace BenchmarkApp_6503Gin
 {
+    //Class used for storing and retrieving staff data
     class FileManager
     {
-        public List<Creature> LoadCreatures()
+        //Method for loading all staff from a file and storing the data in a list of staff objects
+        public List<Staff> LoadStaff()
         {
             try
             {
-                List<Creature> creatureList = new List<Creature>();
+                List<Staff> staffList = new List<Staff>();
 
-                StreamReader sr = new StreamReader("Creatures.txt");
+                StreamReader sr = new StreamReader("Staff.txt");
 
                 while (!sr.EndOfStream)
                 {
                     string temp = sr.ReadLine();
                     string[] values = temp.Split(',');
 
-                    Creature c = new Creature();
-                    c.CreatureName = values[0];
-                    c.Age = int.Parse(values[1]);
-                    c.Owner = values[2];
+                    Staff c = new Staff()
+                    {
+                        FirstName = values[0],
+                        LastName = values[1],
+                        StaffID = int.Parse(values[2]),
+                        DateOfBirth = values[3],
+                        Email = values[4],
+                        Salary = int.Parse(values[5])
+                    };
 
-                    creatureList.Add(c);
+                    staffList.Add(c);
                 }
 
                 sr.Dispose();
 
-                return creatureList;
+                return staffList;
             }
             catch (Exception)
             {
@@ -41,16 +48,19 @@ namespace BenchmarkApp_6503Gin
 
         }
 
-        public bool SaveCreature(Creature c, string fileName)
+        //Method for saving staff information to a text file
+        public bool SaveStaff(Staff c, string fileName)
         {
             try
             {
                 StreamWriter sw = new StreamWriter(fileName);
 
-                sw.WriteLine("CREATURE DETAILS");
-                sw.WriteLine("Creature Name: " + c.CreatureName);
-                sw.WriteLine("Creature Age: " + c.Age);
-                sw.WriteLine("Creature Owner: " + c.Owner);
+                sw.WriteLine("STAFF DETAILS");
+                sw.WriteLine("Name: " + c.FirstName + " " + c.LastName);
+                sw.WriteLine("ID: " + c.StaffID);
+                sw.WriteLine("DOB: " + c.DateOfBirth);
+                sw.WriteLine("Email: " + c.Email);
+                sw.WriteLine("Salary: $" + c.Salary);
 
                 sw.Dispose();
 

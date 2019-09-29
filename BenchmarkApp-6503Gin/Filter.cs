@@ -6,31 +6,35 @@ using System.Threading.Tasks;
 
 namespace BenchmarkApp_6503Gin
 {
-    class Filter
+    //Class used for filtering and ordering the various staff attributes.
+    public class Filter
     {
-        public List<Creature> SortAZ(List<Creature> cList)
+        //Order the list alphabetically in descending order
+        public List<Staff> SortAZ(List<Staff> cList)
         {
-            cList = cList.OrderBy(x => x.CreatureName).ToList();
+            cList = cList.OrderBy(x => x.FirstName).ToList();
 
             return cList;
         }
 
-        public List<Creature> SortZA(List<Creature> cList)
+        //Order the list alphabetically in ascending order
+        public List<Staff> SortZA(List<Staff> cList)
         {
             cList = (from x in cList
-                     orderby x.CreatureName descending
+                     orderby x.FirstName descending
                      select x).ToList();
 
             return cList;
         }
 
-        public List<Creature> Search(List<Creature> cList, string term)
+        //Compare the item in the list with the term captured from the search box. Return the items that correspond with the term.
+        public List<Staff> Search(List<Staff> cList, string term)
         {
-            List<Creature> results = new List<Creature>();
+            List<Staff> results = new List<Staff>();
 
-            foreach (Creature c in cList)
+            foreach (Staff c in cList)
             {
-                if (c.CreatureName.ToLower().Contains(term.ToLower()))
+                if (c.FirstName.ToLower().Contains(term.ToLower()))
                 {
                     results.Add(c);
                 }

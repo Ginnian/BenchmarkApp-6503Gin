@@ -10,68 +10,74 @@ using System.Windows.Forms;
 
 namespace BenchmarkApp_6503Gin
 {
+    //Methods for responding to UI interactions
     public partial class Form1 : Form
     {
-        List<Creature> creatures = new List<Creature>();
+        List<Staff> staff = new List<Staff>(); 
 
         public Form1()
         {
             InitializeComponent();
         }
 
+        //When load button is clicked, load in staff details from the file
         private void BtnLoad_Click(object sender, EventArgs e)
         {
-            creatures.Clear();
+            staff.Clear();
 
             FileManager fm = new FileManager();
 
-            creatures = fm.LoadCreatures();
+            staff = fm.LoadStaff();
 
-            if (creatures == null)
+            if (staff == null)
             {
-                MessageBox.Show("Error Loading Creatures", "File IO Error");
+                MessageBox.Show("Error Loading Staff", "File IO Error");
             }
             else
             {
-                lbxCreatures.Items.Clear();
-                lbxCreatures.Items.AddRange(creatures.ToArray());
+                lbxStaff.Items.Clear();
+                lbxStaff.Items.AddRange(staff.ToArray());
             }
         }
 
+        //When the AZ button is clicked, sort the staff information alphabetically, in descending order
         private void SortAZ_Click(object sender, EventArgs e)
         {
             Filter cFilter = new Filter();
 
-            creatures = cFilter.SortAZ(creatures);
+            staff = cFilter.SortAZ(staff);
 
-            lbxCreatures.Items.Clear();
-            lbxCreatures.Items.AddRange(creatures.ToArray());
+            lbxStaff.Items.Clear();
+            lbxStaff.Items.AddRange(staff.ToArray());
         }
 
+        //When the ZA button is clicked, sort the staff information alphabetically, in ascending order
         private void SortZA_Click(object sender, EventArgs e)
         {
             Filter cFilter = new Filter();
 
-            creatures = cFilter.SortZA(creatures);
+            staff = cFilter.SortZA(staff);
 
-            lbxCreatures.Items.Clear();
-            lbxCreatures.Items.AddRange(creatures.ToArray());
+            lbxStaff.Items.Clear();
+            lbxStaff.Items.AddRange(staff.ToArray());
         }
 
+        //When the search button is clicked, capture the text in the search text box and filter the results according to that text.
         private void BtnSearch_Click(object sender, EventArgs e)
         {
-            List<Creature> results = new List<Creature>();
+            List<Staff> results = new List<Staff>();
 
             Filter cFilter = new Filter();
 
             string term = tbxSearch.Text;
 
-            results = cFilter.Search(creatures, term);
+            results = cFilter.Search(staff, term);
 
             lbxSearchResults.Items.Clear();
             lbxSearchResults.Items.AddRange(results.ToArray());
         }
 
+        //When the save button is clicked, save the staff information to a text file. If the user chooses to view the file, open the saved text file.
         private void BtnSave_Click(object sender, EventArgs e)
         {
 
@@ -79,15 +85,15 @@ namespace BenchmarkApp_6503Gin
             {
                 FileManager fm = new FileManager();
 
-                Creature c = (Creature)lbxSearchResults.SelectedItem;
+                Staff c = (Staff)lbxSearchResults.SelectedItem;
 
-                string fileName = c.CreatureName + c.Age + c.Owner + ".txt";
+                string fileName = c.FirstName + c.LastName + c.StaffID + ".txt";
 
-                bool result = fm.SaveCreature(c, fileName);
+                bool result = fm.SaveStaff(c, fileName);
 
                 if (result == false)
                 {
-                    MessageBox.Show("Error Saving Creature", "File IO Error");
+                    MessageBox.Show("Error Saving Staff", "File IO Error");
                 }
                 else
                 {
@@ -101,19 +107,23 @@ namespace BenchmarkApp_6503Gin
             }
             catch (Exception)
             {
-                MessageBox.Show("Please select a creature", "Error");
+                MessageBox.Show("Please select a staff member", "Error");
             }
         }
 
+        //If user clicks item in the staff last, display staff information in the text boxes.
         private void LbxSearchResults_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
-                Creature c = (Creature)lbxSearchResults.SelectedItem;
+                Staff c = (Staff)lbxSearchResults.SelectedItem;
 
-                tbxName.Text = c.CreatureName;
-                tbxAge.Text = c.Age.ToString();
-                tbxOwner.Text = c.Owner;
+                tbxName.Text = c.FirstName + " " + c.LastName;
+                tbxStaffID.Text = c.StaffID.ToString();
+                tbxDOB.Text = c.DateOfBirth;
+                tbxEmail.Text = c.Email;
+                tbxSalary.Text = c.Salary.ToString();
+
             }
             catch (Exception)
             {
